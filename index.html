@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>sgmerwin</title>
+</head>
+<body>
+<h1>JavaFX GUI & ODrive Brushless Motor Controller</h1>
+<p>
+    I like prototyping hardware designs and building the corresponding software interfaces.
+    I have done all kinds of fabrication work. What I am currently working on is writing software in Java to control a CNC machine.
+    The CNC will use brushless motors and ODrive control boards. The ODrive boards are being widely used in robotic research and making it very easy to control high powered brushless motors in a low budget project.
+    Here is an image of the hardware I have setup in order to start testing software.
+<p/>
+<p>
+    <img src="odrive_10_30_19.jpg" alt="odrive board" align="middle"
+         style="width:800px;height:1000px;" >
+</p>
+<p>
+    Hardware just is what it is. You CAD up a design, fabricate a run of parts, and see how it all works in the real world.
+    Everything always looks great in CAD and works in the sim. Getting it all put together and working in the real world is certainly a different beast.
+    But the hardware works like it works and does what it does. It all boils down to the software.
+    Software is the hard part.
+</p>
+<p>
+    Over the years I have used a lot of different CAD software. I like digging into the software design ideas and seeing what interface concepts designers came up with.
+    SolidWorks, Inventor, OnShape, Fusion 360, Siemens NX ... All great design tree CAD products. Blender is not design tree CAD but an incredible software and there are several engineers
+    that have written about using Blender for precision mechanical design. If your internet connection is good OnShape is awesome. For 2D CAD I have been sold on Affinity Designer for quite some time.
+    I have used Affinity Designer to CAD countless circuit boards that I cut on a CNC router.
+</p>
+<p>
+    With all of this I have never been satisfied with the whole CNC router process to cut parts. I am referring to a 60cm x 30cm desktop CNC router.
+    I want to up load my CAD file to the CAM software and have it do a much better job of taking care of business. I also have always found the CAD and CAM software
+    designs to be to full of clicky menus that you have to learn your way through.
+    I would prefer to type commands into a search engine and have the search engine chase down methods for me.
+</p>
+<p>
+    With this idea of developing a search engine style CAM software to run a brushless motor CNC machine using ODrive boards
+    I spent a few days learning JavaFX. I wrote the Java software using the same design concepts I have used over and over again.
+    I figured I would take some time and write about these design concepts here and maybe I could find
+    a few good critics to help me improve the way I do things. I have been having fun with JavaFX. I have been able to make progress
+    quickly and I am quite impressed with how well JavaFX is put together. I have had more blocks of code run on a first attempt than
+    with any other project. So far I am thinking JavaFX could be a great solution to build impressive GUI apps very quickly.
+    Here is a flowchart image of the design structure I am using.
+</p>
+<p>
+    <img src="blog_design_structure.jpg" alt="Design Structure Flowchart" align="middle"
+         style="width:800px;height1000px;">
+</p>
+<p>
+    Here is a link to the Main class in the JavaFX app.
+    <a target = "_blank" href="https://github.com/sgmerwin/sgmerwin.github.io/blob/master/Main.java">Main class</a>
+    There are two JavaFX groups in the Scene. One group is the background and the other group holds the nodes and handles the mouse action events to rotate, scroll and drag.
+    There are two textfields on the background group: one for user input and one for search engine feedback.
+    The background group also holds a running object list. Here is a screenshot of the Java app running with a few shape nodes.
+</p>
+<p>
+    <img src="javafx_screenshot_10_30_19.jpg" alt="JavaFX app screenshot" align="middle" style="width:800px;height1000px;">
+</p>
+<p>
+    At the bottom of Main I run a couple of threads and do a memory usage calculation. I do this in python and C++ and when using microcontrollers and so on.
+    I will take it out of a final run but when your developing it is nice to make certain nothing weird is going on and the memory usage is as expected.
+    It is also a good way to see how expensive it is to make a new thread.
+    Here is a screenshot of the memory usage.
+</p>
+<p>
+    <img src="memory_screenshot_10_30_19.jpg" alt="Memory usage screenshot" align="middle" style="width:300px;height300px;">
+</p>
+<p>
+    The two big things happening in Main are that the eventhandler on the textfield calls the decision function and in the
+    main method calls the makeRunAll method which builds the arraylist the decision method searches through.
+    All of the code you want to execute in the main method has to be before the JavaFX launch call.
+</p>
+<p>
+    The rest of the action happens in the Funct class. Here is a link to the Funct class.
+    <a target = "_blank" href="https://github.com/sgmerwin/sgmerwin.github.io/blob/master/Funct.java">Funct class</a>
+</p>
+<p>
+    There is a Drag class and a GroupGestures class. That is just how I structured panning the group that is holding the nodes with a right click.
+    There is probably a cleaner way to write the mouse events. There may be mouse events prebuilt in the JavaFXtras library that would be a cleaner
+    implementation. I have not gotten that far yet.
+    <a target = "_blank" href="https://github.com/sgmerwin/sgmerwin.github.io/blob/master/Drag.java">Drag class</a>
+    <a target = "_blank" href="https://github.com/sgmerwin/sgmerwin.github.io/blob/master/GroupGestures.java">GroupGestures class</a>
+</p>
+<p>
+    The cool stuff is in the Funct class. It makes the app easy to expand. Just keep adding more lambdas and methods and lambdas to the arraylist that the decision method searches.
+    The last method I built loads an FXML file to the group on the fly via the command window.
+    So you can load and remove FXML files from the scene via the textfield while the app is running.
+    It does not take long to add and edit lambdas. So you can just keep adding functionality to the scene.
+    In the Funct class there is an array list called run with no type specification.
+    The main methods runs the makeRunAll method and fills the run array up.
+    Now the decision method can search run when the textfield sets off the event handler on the enter key.
+    The decision method takes the string and breaks it into an array based on ",".
+    If decision finds a match in run then is calls the corresponding lambda which is also living in run and feeds the lambda the string array.
+    If the lambda likes the string array it will call up a method to work with nodes. If the lambda does not like the string array the user will
+    get feed that info in the textfield on the scene.
+    The idea is to keep adding methods and lambdas and keep making the search process more sophisticated.
+</p>
+<p>
+    I think with this structure we can do a lot with JavaFX fairly easy. I like the text command search.
+    There is a JavaFXtras library and a JavaFXyz library that I have not gotten into yet. The group the nodes
+    are being added to needs a method for an STL and an OBJ export.
+    What I am interested in doing is being able to import a CAD file for a part to be cut on a CNC machine
+    and then run the CNC simulation in JavaFX. I am also going to run the ODrive board from a serial IO from Java and see
+    how that goes.
+    After two days of playing around with JavaFX it seems to have a lot of potential.
+    There is also a JavaFX SceneBuilder that I have not tried yet. I like to spend some time designing and coding
+    before I just jump to use someone else's work.
+    I didn't use Java for quite a while and now getting back into it is such a pleasure.
+    Java is just super flexible and I like the breakup of compile time errors vs. runtime errors.
+    I really like the predefined functional interfaces and the lambda expression that came with Java 8.
+    It was just a massive improvement to the language. It is sweet to be able to just call up the predefined
+    functional interfaces and bag lambda expressions up in arrays and then we can search for them and call them out.
+    And the coding to do this is so minimal. Having predefined code blocks is a really clean feature and makes
+    the code so much more readable.
+
+</p>
+
+</body>
+</html>

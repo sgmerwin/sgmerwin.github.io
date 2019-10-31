@@ -6,6 +6,7 @@
 </head>
 <body>
 <h1>JavaFX GUI & ODrive Brushless Motor Controller</h1>
+<p>Written 10/30/19</p>
 <p>
     I like prototyping hardware designs and building the corresponding software interfaces.
     I have done all kinds of fabrication work. What I am currently working on is writing software in Java to control a CNC machine.
@@ -67,8 +68,8 @@
     <img src="memory_screenshot_10_30_19.jpg" alt="Memory usage screenshot" align="middle" style="width:300px;height300px;">
 </p>
 <p>
-    The two big things happening in Main are that the eventhandler on the textfield calls the decision function and in the
-    main method calls the makeRunAll method which builds the arraylist the decision method searches through.
+    The two big things happening in Main are that the eventhandler on the textfield calls the decision function and the
+    main method calls the makeRunAll method which builds the arraylist that the decision method searches through.
     All of the code you want to execute in the main method has to be before the JavaFX launch call.
 </p>
 <p>
@@ -76,24 +77,26 @@
     <a target = "_blank" href="https://github.com/sgmerwin/sgmerwin.github.io/blob/master/Funct.java">Funct class</a>
 </p>
 <p>
-    There is a Drag class and a GroupGestures class. That is just how I structured panning the group that is holding the nodes with a right click.
-    There is probably a cleaner way to write the mouse events. There may be mouse events prebuilt in the JavaFXtras library that would be a cleaner
-    implementation. I have not gotten that far yet.
+    There is a Drag class and a GroupGestures class.
     <a target = "_blank" href="https://github.com/sgmerwin/sgmerwin.github.io/blob/master/Drag.java">Drag class</a>
     <a target = "_blank" href="https://github.com/sgmerwin/sgmerwin.github.io/blob/master/GroupGestures.java">GroupGestures class</a>
+    That is just how I structured panning the group that is holding the nodes with a right click.
+    There is probably a cleaner way to write the mouse events. There may be mouse events prebuilt in the JavaFXtras library that would be a cleaner
+    implementation. I have not gotten that far yet. The rotation and scroll mouse events are in the Main Class. Yeah, this is messy. The mouse events are not that
+    interesting to build.
 </p>
 <p>
-    The cool stuff is in the Funct class. It makes the app easy to expand. Just keep adding more lambdas and methods and lambdas to the arraylist that the decision method searches.
+    The cool stuff is in the Funct class. It makes the app easy to expand. Just keep adding more lambdas and methods. Add the lambdas to the arraylist that the decision method searches and your rockin.
     The last method I built loads an FXML file to the group on the fly via the command window.
     So you can load and remove FXML files from the scene via the textfield while the app is running.
     It does not take long to add and edit lambdas. So you can just keep adding functionality to the scene.
     In the Funct class there is an array list called run with no type specification.
-    The main methods runs the makeRunAll method and fills the run array up.
+    The main method runs the makeRunAll method and fills the run array up.
     Now the decision method can search run when the textfield sets off the event handler on the enter key.
     The decision method takes the string and breaks it into an array based on ",".
     If decision finds a match in run then is calls the corresponding lambda which is also living in run and feeds the lambda the string array.
     If the lambda likes the string array it will call up a method to work with nodes. If the lambda does not like the string array the user will
-    get feed that info in the textfield on the scene.
+    be fed that info in the textfield on the scene.
     The idea is to keep adding methods and lambdas and keep making the search process more sophisticated.
 </p>
 <p>
@@ -113,8 +116,23 @@
     functional interfaces and bag lambda expressions up in arrays and then we can search for them and call them out.
     And the coding to do this is so minimal. Having predefined code blocks is a really clean feature and makes
     the code so much more readable.
-
 </p>
-
+<p>
+    <h4>Future Path with JavaFX</h4>
+    I have a math degree so I have to build 3D plotting in this app now that I got started. I always thought it would be great
+to run my CNC from a wifi joystick. You have to spent time doing manual setups and changing tools and there are times
+when you just want to use the machine to make a simple cut or as a drill press.
+Sometimes you want to roll through some different setting and see what speed runs
+look like. Doing these tasks from keyboard commands gets old. Also having the emergency stop on the wifi joystick would be nice.
+</p>
+<p>
+    <h4>Camera Data</h4>
+I have had this idea of implementing camera data into the CAM software for years. Mount a camera on the CNC that detects the
+stock material that is clamped in the CNC work area. It could run some code to check dimensions of the CAD file and the stock material
+and setup the layout for the cut. Camera data may be accurate enough to check if the tool is going to run level across the stock material.
+The camera could do problem detection and stop the machine if the tool breaks, the stock material breaks, if the tool hits the deck, ...
+If Musk can program cars to drive around L.A. we can certainly utilize camera data in CAM software to make a smart CNC machine.
+</p>
 </body>
+
 </html>

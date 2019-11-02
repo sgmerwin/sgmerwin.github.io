@@ -1,12 +1,16 @@
 package sample;
 
+import com.sun.javafx.fxml.builder.JavaFXSceneBuilder;
 import javafx.animation.Animation;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Material;
+import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -58,6 +62,9 @@ public class Funct {
         makeRun(transitionStop,"transitionstop","transitionstop, array position","stops the animation at the given array position");
         makeRun(textdisplay,"textdisplay","textdisplay, String text displayed, int x , int y, String font type, int font size","Displays text");
         makeRun(rotate,"rotate","rotate, int angle, int x, int y, int z, String axis, String name, int pos","Rotate the given object");
+        makeRun(fxmlloader,"fxmlloader","fxmlloader, String file","FXMLLoader will load the provide fxml file");
+        makeRun(color2D,"color2d","color2d, int red, int green, int blue, String name, int pos","Color2D adds the RGB value to the 2D node");
+        makeRun(color3D,"color3d","color3d int diffRed, int diffGreen, int diffBlue, String name, int pos","Color3D adds a diffused to a 3D shape");
     }//method
 
     static void decision(){
@@ -92,6 +99,19 @@ public class Funct {
                     String[] editParts = new String[parts.length];
                     for (int k = 0; k < parts.length; k++) {
                         editParts[k] = parts[k].replace(" ","");
+                    }
+                    funct.apply(editParts);
+                } catch (Exception e) {
+                    System.out.println("Function Call Failed");
+                }
+            }
+            else if(name.equals("fxmlloader")){
+                int i = runs.indexOf(name);
+                Function funct = (Function) runs.get(i+3);
+                try {
+                    String[] editParts = new String[parts.length];
+                    for (int k = 0; k < parts.length; k++) {
+                        editParts[k] = parts[k].trim();
                     }
                     funct.apply(editParts);
                 } catch (Exception e) {
@@ -143,6 +163,12 @@ public class Funct {
         arrNodes.add(arrTextDisplay);
         arrNodes.add("rotate");
         arrNodes.add(arrRotate);
+        arrNodes.add("parent");
+        arrNodes.add(arrParent);
+        arrNodes.add("color");
+        arrNodes.add(arrColor);
+        arrNodes.add("phong");
+        arrNodes.add(arrPhong);
     }
 
     static ArrayList<CubicCurve> arrCubicCurve = new ArrayList<>();
@@ -734,14 +760,14 @@ public class Funct {
     static int parentCount = 0;
     static List parentList = new ArrayList();
 
-    static void fxmlLoader(String file) {
+    static void fxmlloaderM(String file) {
 
         try {
             arrFMXLLoader.add(new FXMLLoader());
             arrParent.add(arrFMXLLoader.get(FXMLLoaderCount).load(Funct.class.getResource(file)));
             Main.group2.getChildren().add(arrParent.get(parentCount));
             arrString.add("FXMLLoader_"+FXMLLoaderCount);
-            GenText("FXMLLoader_"+FXMLLoaderCount+" "+file+" ",objectx,objecty+25+strCount*20);
+            GenText("Parent_"+parentCount+" "+file+" ",objectx,objecty+25+strCount*20);
             FXMLLoaderList.add("FXMLloader_"+FXMLLoaderCount);
             FXMLLoaderList.add(strCount);
             FXMLLoaderList.add(objecty+25+strCount*20);
@@ -753,6 +779,134 @@ public class Funct {
             Main.textfieldB.setText("FXML did not load");
         }
     }//method
+
+    static Function<String[], Boolean> fxmlloader = (String[] str) ->{
+        if(!(str.length == 2)) {
+            Main.textfieldB.setText("Not A Command");
+            return false;
+        }
+        try {
+            fxmlloaderM(str[1]);
+        }
+        catch (Exception e) {
+            Main.textfieldB.setText("Something went wrong inside of fxmlloader call");
+            return false;
+        }
+        return true;
+    };//function
+
+    static ArrayList<Color> arrColor = new ArrayList<>();
+    static int colorCount = 0;
+    static List colorList = new ArrayList();
+    //arrRect.get(rectCount).setFill(Color.LIGHTBLUE);
+
+    static void color2DM(int red, int green, int blue, String name, int pos){
+        Color c = Color.rgb(red, green, blue);
+        arrColor.add(c);
+        if(arrNodes.contains(name)) {
+            try {
+                int i = arrNodes.indexOf(name);
+                List nodes = (ArrayList) arrNodes.get(i + 1);
+                Shape node = (Shape) nodes.get(pos);
+                node.setFill(arrColor.get(colorCount));
+                arrString.add("color_" + colorCount);
+                GenText("Color" + colorCount + " " + name + "_" + pos+"(" + red +","+green+","+blue+")", objectx, objecty + 25 + strCount * 20);
+                colorList.add("color_" + colorCount);
+                colorList.add(strCount);
+                colorList.add(objecty + 25 + strCount * 20);
+                ++colorCount;
+                ++strCount;
+            }catch(Exception e){
+                Main.textfieldB.setText("Error in color method call");
+            }
+        }
+        else
+            Main.textfieldB.setText("Not A Command");
+    }//method
+
+    //int red, int green, int blue, String name, int pos
+    static Function<String[], Boolean> color2D = (String[] str) ->{
+        if(!(str.length == 6)) {
+            Main.textfieldB.setText("Not A Command");
+            return false;
+        }
+        else{
+            try {
+                int red = Integer.parseInt(str[1]);
+                int green = Integer.parseInt(str[2]);
+                int blue = Integer.parseInt(str[3]);
+                String name = str[4].replace(" ","").toLowerCase();
+                int pos = Integer.parseInt(str[5]);
+                color2DM(red,green,blue,name,pos);
+            } catch (NumberFormatException e) {
+                Main.textfieldB.setText("Not A Command");
+                return false;
+            }
+            catch (Exception e) {
+                Main.textfieldB.setText("Something went wrong inside of Color lambda call");
+                return false;
+            }
+            return true;
+        }
+    };//function
+
+    static ArrayList<PhongMaterial> arrPhong = new ArrayList<>();
+    static int phongCount = 0;
+    static List phongList = new ArrayList();
+
+    static void color3DM(int diffRed, int diffGreen, int diffBlue, String name, int pos){
+        Color d = Color.rgb(diffRed, diffGreen, diffBlue);
+        arrColor.add(d);
+        ++colorCount;
+        arrPhong.add(new PhongMaterial());
+        arrPhong.get(phongCount).setDiffuseColor(d);
+        if(arrNodes.contains(name)) {
+            try {
+                int i = arrNodes.indexOf(name);
+                List nodes = (ArrayList) arrNodes.get(i + 1);
+                Shape3D node = (Shape3D) nodes.get(pos);
+                node.setMaterial(arrPhong.get(phongCount));
+                arrString.add("PhongMaterial_" + phongCount);
+                GenText("PhongMaterial" + phongCount + " " + name + "_" + pos, objectx, objecty + 25 + strCount * 20);
+                phongList.add("phong_" + phongCount);
+                phongList.add(strCount);
+                phongList.add(objecty + 25 + strCount * 20);
+                ++phongCount;
+                ++strCount;
+            }catch(Exception e){
+                Main.textfieldB.setText("Error in color method call");
+            }
+        }
+        else
+            Main.textfieldB.setText("Not A Command");
+    }//method
+
+    //int diffRed, int diffGreen, int diffBlue, String name, int pos
+    static Function<String[], Boolean> color3D = (String[] str) ->{
+        if(!(str.length == 6)) {
+            Main.textfieldB.setText("Not A Command");
+            return false;
+        }
+        else{
+            try {
+                int diffRed = Integer.parseInt(str[1]);
+                int diffGreen = Integer.parseInt(str[2]);
+                int diffBlue = Integer.parseInt(str[3]);
+                String name = str[4].replace(" ","").toLowerCase();
+                int pos = Integer.parseInt(str[5]);
+                Main.textfieldB.setText(diffRed+" "+diffGreen+" "+diffBlue+" "+name+" "+pos);
+                color3DM(diffRed,diffGreen,diffBlue,name,pos);
+            } catch (NumberFormatException e) {
+                Main.textfieldB.setText("Not A Command");
+                return false;
+            }
+            catch (Exception e) {
+                Main.textfieldB.setText("Something went wrong inside of Color lambda call");
+                return false;
+            }
+            return true;
+        }
+    };//function
 
 
 

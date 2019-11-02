@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1>JavaFX GUI & ODrive Brushless Motor Controller</h1>
-<p>Written 10/30/19</p>
+<p>Written 10/30/19 &emsp; stevegmerwin@gmail.com</p>
 <p>
     I like prototyping hardware designs and building the corresponding software interfaces.
     I have done all kinds of fabrication work. What I am currently working on is writing software in Java to control a CNC machine.
@@ -132,6 +132,31 @@ stock material that is clamped in the CNC work area. It could run some code to c
 and setup the layout for the cut. Camera data may be accurate enough to check if the tool is going to run level across the stock material.
 The camera could do problem detection and stop the machine if the tool breaks, the stock material breaks, if the tool hits the deck, ...
 If Musk can program cars to drive around L.A. we can certainly utilize camera data in CAM software to make a smart CNC machine.
+</p>
+
+<p>
+11/2/19
+    <h4>CAD with a joystick?</h4>
+Why do we do CAD with a mouse and play video games with a joystick? We could make a nice CAD interface with a joystick.
+</p>
+<p>
+    I added color2D and color3D and scale2D and scale3D to the method calls this morning.
+    <a target = "_blank" href="https://github.com/sgmerwin/sgmerwin.github.io/blob/master/Funct.java">Funct class</a>
+</p>
+    <p>
+    <img src="color_11_2_19.png" alt="Color screenshot" align="middle" style="width:300px;height300px;">
+</p>
+<p>
+    <img src="scale_11_2_19.png" alt="Scale screenshot" align="middle" style="width:300px;height300px;">
+</p>
+
+<p>
+    I will add the joystick functionality next. That should be more interesting.
+    There is not very much to adding these basic methods.
+    I want to add the joystick to the group the nodes are on so the user can rotate and pan and scroll with it.
+    Then I want to add separate joystick functionality to a node that the user chooses and then the user can rotate
+    and transition that node separate from the rest of the scene.
+    That should take a bit.
 </p>
 </body>
 

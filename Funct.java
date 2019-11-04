@@ -8,6 +8,7 @@ import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.PointLight;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Material;
 import javafx.scene.paint.PhongMaterial;
@@ -24,6 +25,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import com.fazecast.jSerialComm.*;
+
+
 
 public class Funct {
 
@@ -65,6 +69,10 @@ public class Funct {
         makeRun(fxmlloader,"fxmlloader","fxmlloader, String file","FXMLLoader will load the provide fxml file");
         makeRun(color2D,"color2d","color2d, int red, int green, int blue, String name, int pos","Color2D adds the RGB value to the 2D node");
         makeRun(color3D,"color3d","color3d int diffRed, int diffGreen, int diffBlue, String name, int pos","Color3D adds a diffused to a 3D shape");
+        makeRun(scale2D,"scale2d","scale, int x, int y, int z, String name, int pos","scale changes the scale of the object");
+        makeRun(scale3D,"scale3d","scale, int x, int y, int z, String name, int pos","scale changes the scale of the object");
+        makeRun(light,"light","light, x, y, z, red, green, blue","adds a light to the group");
+        makeRun(drawmodeline,"drawmodeline","drawmodeline, String name, int pos", "Sets the draw mode of a 3D shape to line");
     }//method
 
     static void decision(){
@@ -169,6 +177,10 @@ public class Funct {
         arrNodes.add(arrColor);
         arrNodes.add("phong");
         arrNodes.add(arrPhong);
+        arrNodes.add("line");
+        arrNodes.add(arrLine);
+        arrNodes.add("light");
+        arrNodes.add(arrLight);
     }
 
     static ArrayList<CubicCurve> arrCubicCurve = new ArrayList<>();
@@ -902,6 +914,192 @@ public class Funct {
             }
             catch (Exception e) {
                 Main.textfieldB.setText("Something went wrong inside of Color lambda call");
+                return false;
+            }
+            return true;
+        }
+    };//function
+
+    static void scale2DM(int x, int y, int z, String name, int pos){
+        if(arrNodes.contains(name)) {
+            try {
+                int i = arrNodes.indexOf(name);
+                List nodes = (ArrayList) arrNodes.get(i + 1);
+                Shape node = (Shape) nodes.get(pos);
+                node.setScaleX(x);
+                node.setScaleY(y);
+                node.setScaleZ(z);
+                GenText("Scale" +" ("+x +","+y+","+z + ") " + name + "_" + pos, objectx, objecty + 25 + strCount * 20);
+                ++strCount;
+            }catch(Exception e){
+                Main.textfieldB.setText("Error in scale method call");
+            }
+        }
+        else
+            Main.textfieldB.setText("Not A Command");
+    }//method
+
+
+    //int x, int y, int z, String name, int pos
+    static Function<String[], Boolean> scale2D = (String[] str) ->{
+        if(!(str.length == 6)) {
+            Main.textfieldB.setText("Not A Command");
+            return false;
+        }
+        else{
+            try {
+                int x = Integer.parseInt(str[1]);
+                int y = Integer.parseInt(str[2]);
+                int z = Integer.parseInt(str[3]);
+                String name = str[4].replace(" ","").toLowerCase();
+                int pos = Integer.parseInt(str[5]);
+                Main.textfieldB.setText(x+" "+y+" "+z+" "+name+" "+pos);
+                scale2DM(x,y,z,name,pos);
+            } catch (NumberFormatException e) {
+                Main.textfieldB.setText("Not A Command");
+                return false;
+            }
+            catch (Exception e) {
+                Main.textfieldB.setText("Something went wrong inside of Scale lambda call");
+                return false;
+            }
+            return true;
+        }
+    };//function
+
+
+    static void scale3DM(int x, int y, int z, String name, int pos){
+        if(arrNodes.contains(name)) {
+            try {
+                int i = arrNodes.indexOf(name);
+                List nodes = (ArrayList) arrNodes.get(i + 1);
+                Shape3D node = (Shape3D) nodes.get(pos);
+                node.setScaleX(x);
+                node.setScaleY(y);
+                node.setScaleZ(z);
+                GenText("Scale" +" ("+x +","+y+","+z + ") " + name + "_" + pos, objectx, objecty + 25 + strCount * 20);
+                ++strCount;
+            }catch(Exception e){
+                Main.textfieldB.setText("Error in scale method call");
+            }
+        }
+        else
+            Main.textfieldB.setText("Not A Command");
+    }//method
+
+
+    //int x, int y, int z, String name, int pos
+    static Function<String[], Boolean> scale3D = (String[] str) ->{
+        if(!(str.length == 6)) {
+            Main.textfieldB.setText("Not A Command");
+            return false;
+        }
+        else{
+            try {
+                int x = Integer.parseInt(str[1]);
+                int y = Integer.parseInt(str[2]);
+                int z = Integer.parseInt(str[3]);
+                String name = str[4].replace(" ","").toLowerCase();
+                int pos = Integer.parseInt(str[5]);
+                Main.textfieldB.setText(x+" "+y+" "+z+" "+name+" "+pos);
+                scale3DM(x,y,z,name,pos);
+            } catch (NumberFormatException e) {
+                Main.textfieldB.setText("Not A Command");
+                return false;
+            }
+            catch (Exception e) {
+                Main.textfieldB.setText("Something went wrong inside of Scale lambda call");
+                return false;
+            }
+            return true;
+        }
+    };//function
+
+    static ArrayList<PointLight> arrLight = new ArrayList<>();
+    static int lightCount = 0;
+    static List lightList = new ArrayList();
+
+    static void lightM(int x, int y, int z, int red, int green, int blue){
+        try{
+            arrLight.add(new PointLight());
+            arrLight.get(lightCount).setTranslateX(x);
+            arrLight.get(lightCount).setTranslateY(y);
+            arrLight.get(lightCount).setTranslateZ(z);
+            Color d = Color.rgb(red, green, blue);
+            arrColor.add(d);
+            ++colorCount;
+            arrLight.get(lightCount).setColor(d);
+            Main.group2.getChildren().add(arrLight.get(lightCount));
+            arrString.add("PointLight_"+lightCount);
+            lightList.add("PointLight_"+lightCount);
+            lightList.add(strCount);
+            lightList.add(objecty+25+strCount*20);
+            GenText("PointLight" +" ("+x +","+y+","+z + ") "+"color ("+red+","+green+","+blue+")", objectx, objecty + 25 + strCount * 20);
+            ++lightCount;
+            ++strCount;
+        }catch(Exception e){
+                Main.textfieldB.setText("Error in PointLight method call");
+            }
+    }//method
+
+    static Function<String[], Boolean> light = (String[] str) ->{
+        if(!(str.length == 7)) {
+            Main.textfieldB.setText("Not A Command");
+            return false;
+        }
+        else{
+            try {
+                int x = Integer.parseInt(str[1]);
+                int y = Integer.parseInt(str[2]);
+                int z = Integer.parseInt(str[3]);
+                int red = Integer.parseInt(str[4]);
+                int green = Integer.parseInt(str[5]);
+                int blue = Integer.parseInt(str[6]);
+                lightM(x,y,z,red,green,blue);
+            } catch (NumberFormatException e) {
+                Main.textfieldB.setText("Not A Command");
+                return false;
+            }
+            catch (Exception e) {
+                Main.textfieldB.setText("Something went wrong inside of PointLight lambda call");
+                return false;
+            }
+            return true;
+        }
+    };//function
+
+    static void drawmodelineM(String name, int pos){
+        if(arrNodes.contains(name)) {
+            try {
+                int i = arrNodes.indexOf(name);
+                List nodes = (ArrayList) arrNodes.get(i + 1);
+                Shape3D node = (Shape3D) nodes.get(pos);
+                node.setDrawMode(DrawMode.LINE);
+            }catch(Exception e){
+                Main.textfieldB.setText("Error in Draw Mode Line method call");
+            }
+        }
+        else
+            Main.textfieldB.setText("Not A Command");
+    }//method
+
+    static Function<String[], Boolean> drawmodeline = (String[] str) ->{
+        if(!(str.length == 3)) {
+            Main.textfieldB.setText("Not A Command");
+            return false;
+        }
+        else{
+            try {
+                String name = str[1].replace(" ","").toLowerCase();
+                int pos = Integer.parseInt(str[2]);
+                Main.textfieldB.setText("draw line mode " +name+"_"+pos);
+                drawmodelineM(name,pos);
+            } catch (NumberFormatException e) {
+                Main.textfieldB.setText("Not A Command");
+                return false;
+            }
+            catch (Exception e) {
+                Main.textfieldB.setText("Something went wrong inside of drawmodeline lambda call");
                 return false;
             }
             return true;

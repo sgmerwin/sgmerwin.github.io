@@ -3,6 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>sgmerwin</title>
+    <link rel="stylesheet" href="app.css" />
+    <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'],
+      processEscapes: true
+    }
+  });
+</script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
 <h1>JavaFX GUI & ODrive Brushless Motor Controller</h1>
@@ -199,6 +210,35 @@ Here is a screenshot.
 <p>
     <img src="mesh_11_4_19.png" alt="mesh screenshot" align="middle"
          style="width:300px;height300px;" >
+</p>
+<p>
+    11/5/19
+</p>
+<p>
+<h4>JavaFXyz & JavaFXtras</h4>
+I added the JavaFXyz and the JavaFXtras jars to my dependencies this morning.
+The project rebuilt w/o any issues on the first run, takes the fun out of things.
+The JavaFXyz example code is working w/o a problem so far. It will probably take a few days
+of reading to figure out the code that is in these and how to use it.
+A software engineer from NASA has a YouTube video discussing the FXyz app they used on a project.
+They built a menu driven desktop app for plotting data.
+Here is a screenshot of FXyz working with a 3D mesh plot and a spring from the example code.
+</p>
+<p>
+    <img src="Javafxyx_JavaFXtras_11_5_19.png" alt="mesh screenshot" align="middle"
+         style="width:300px;height300px;" >
+</p>
+<p>
+    I put the JavaFXyz and the JavaFXtras jars in my JavaFX folder. I am using IntellJ and just have IntellJ
+    pointing the compiler to the JavaFX folder. It makes things easy b/c I just drag the jars into that folder and
+    rebuild the project and it all takes a couple of seconds. I put the entire dependencies folder I am using
+    in Google Drive. It's getting kinda big for GitHub. The notes for the VM are in there as well and the current project folder.
+    JavaFXyz has a link to the jars right on the github page. Sometimes building from source turns into a time void.
+    So in IntellJ go to files -> project structure and then add the lib folder to the libraries and the legal folder to modules.
+    Then run -> edit configurations and add the notes to the VM. Rebuild the project and see if it comes up clean.
+</p>
+<p>
+    <a target = "_blank" href="https://drive.google.com/open?id=1_DPHI-pqN7TPvmJk_5u-iQ_5kLBB5Epj">JavaFX Folder</a>
 </p>
 </body>
 

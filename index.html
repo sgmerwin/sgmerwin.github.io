@@ -180,6 +180,26 @@ Put this OdriveArduino folder in there. Then #include ODriveArduino.h
     <img src="drawmode_11_4_19.png" alt="draw mode line" align="middle"
          style="width:300px;height300px;" >
 </p>
+<p>
+    <h4>MeshView</h4>
+I added a mesh view method. <a target = "_blank" href="https://github.com/sgmerwin/sgmerwin.github.io/blob/master/Funct.java">Funct class</a> The mesh method takes an x,y,z and a float array for the vertices and an int array for the faces. I am mapping the faces array against a
+bogus texture array in the function. That could be changed. So I built a float array method that builds the float array. Then I built an int array method that builds the int array.
+Then the user inserts those arrays into the mesh call with an x,y,z.
+It does work but I'm getting this warning so I need to rethink the bogus texture array idea.
+But once you add an array it is saved so you can reuse it in another mesh call. If you want to edit it you have to make a new array.
+
+</p>
+<p>
+Nov 04, 2019 7:24:51 PM javafx.scene.shape.TriangleMesh validateFaces
+WARNING: The values in the faces array must be within the range of the number of vertices in the points array (0 to points.length / 3 - 1) for the point indices and within the range of the number of the vertices in the texCoords array (0 to texCoords.length / 2 - 1) for the texture coordinate indices.
+</p>
+<p>
+Here is a screenshot.
+</p>
+<p>
+    <img src="mesh_11_4_19.png" alt="mesh screenshot" align="middle"
+         style="width:300px;height300px;" >
+</p>
 </body>
 
 </html>

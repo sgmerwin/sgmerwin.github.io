@@ -1239,7 +1239,7 @@ public class Funct {
         trimeshList.add("TriMesh_"+trimeshCount);
         trimeshList.add(strCount);
         trimeshList.add(objecty+25+strCount*20);
-        GenText("TriMesh" +" ("+x +","+y+","+z + ") ", objectx, objecty + 25 + strCount * 20);
+        GenText("TriMesh_"+trimeshCount +" ("+x +","+y+","+z + ") ", objectx, objecty + 25 + strCount * 20);
         ++strCount;
         // Create a MeshView
         arrMeshView.add(new MeshView());

@@ -32,8 +32,15 @@ import org.w3c.dom.ls.LSOutput;
 
 import javax.swing.*;
 import java.awt.geom.Line2D;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.fazecast.jSerialComm.*;
+
+import arduino.*;
 
 /**
  * This was built in IntellJ
@@ -61,14 +68,15 @@ public class Main extends Application {
     Double anchorAngleY = 0.0;
     final DoubleProperty angleX = new SimpleDoubleProperty(0);
     final DoubleProperty angleY = new SimpleDoubleProperty(0);
-
+    
     public void start(Stage stage){
         stage.setTitle("JavaFX Commands");
         group.getChildren().add(group2);
         group2.setLayoutX(700);
         group2.setLayoutY(300);
 
-        Scene scene = new Scene(group, Width, Height);
+        //The true is enabling a depth buffer?
+        Scene scene = new Scene(group, Width, Height,true);
 
         GroupGestures groupGestures = new GroupGestures(group2);
         scene.addEventFilter(MouseEvent.MOUSE_PRESSED, groupGestures.getOnMousePressedEventHandler());
@@ -106,8 +114,6 @@ public class Main extends Application {
         group2.translateZProperty().set(0);
         initMouseControl(group2, scene, stage);
 
-        Funct.fxmlLoader("test.fxml");
-
         scene.setFill(Color.WHITE);
         scene.setCamera(camera);
         stage.setScene(scene);
@@ -127,7 +133,7 @@ public class Main extends Application {
         textfieldA.setText("Enter Command");
         textfieldA.setPrefColumnCount(50);
         textfieldB.setText("Return Method Call");
-        textfieldB.setPrefColumnCount(50);
+        textfieldB.setPrefColumnCount(75);
 
         EventHandler<ActionEvent> eventA = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event)
@@ -174,6 +180,25 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         Runnable r1 = () -> {
+            Arduino mega = new Arduino();
+
+            mega.setPortDescription("/dev/cu.usbmodem14101");
+            mega.setBaudRate(9600);
+
+            mega.openConnection();
+
+            System.out.println("open connection  " + mega.openConnection());
+            System.out.println("serial port " + mega.getSerialPort());
+
+
+            while (mega.openConnection()) {
+                String i = mega.serialRead(1);
+                System.out.println(i);
+
+            }
+        };
+
+        Runnable r2 = () -> {
             Funct.makeRunAll();
             System.out.println("Total memory available to java in mb");
             System.out.println(Runtime.getRuntime().totalMemory() / Math.pow(10, 6));
@@ -182,13 +207,16 @@ public class Main extends Application {
             System.out.println("Max memory available to java in gb");
             System.out.println(Runtime.getRuntime().maxMemory()/ Math.pow(10, 9));
         };
-        Runnable r2 = () -> launch(args);
 
-        Thread t1 = new Thread(r1);
+        Runnable r3 = () -> launch(args);
+
+        //Thread t1 = new Thread(r1);
         Thread t2 = new Thread(r2);
+        Thread t3 = new Thread(r3);
 
-        t1.start();
+        //t1.start();
         t2.start();
+        t3.start();
 
     }//main
 }//class

@@ -1,32 +1,25 @@
 package sample;
 
-import com.sun.javafx.fxml.builder.JavaFXSceneBuilder;
 import javafx.animation.Animation;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.JavaFXBuilderFactory;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.PointLight;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Material;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Transform;
 import javafx.util.Duration;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URL;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
-import com.fazecast.jSerialComm.*;
-
 
 
 public class Funct {
@@ -71,8 +64,12 @@ public class Funct {
         makeRun(color3D,"color3d","color3d int diffRed, int diffGreen, int diffBlue, String name, int pos","Color3D adds a diffused to a 3D shape");
         makeRun(scale2D,"scale2d","scale, int x, int y, int z, String name, int pos","scale changes the scale of the object");
         makeRun(scale3D,"scale3d","scale, int x, int y, int z, String name, int pos","scale changes the scale of the object");
-        makeRun(light,"light","light, x, y, z, red, green, blue","adds a light to the group");
+        makeRun(light,"light","light, x, y, z, red, green, blue","Adds a light to the group");
         makeRun(drawmodeline,"drawmodeline","drawmodeline, String name, int pos", "Sets the draw mode of a 3D shape to line");
+        makeRun(drawmodefill,"drawmodefill","drawmodefill, String name, int pos", "Sets the draw mode of a 3D shape to fill");
+        makeRun(floatarray,"floatarray","floatarray, {your numbers}","Stores the float array in an array");
+        makeRun(intarray,"intarray","intarray, {your numbers}","stores the int array in an array");
+        makeRun(mesh,"mesh","mesh, int x, int y, int z, float array list vertex pts, int array list faces","First the arrays have to be made with floatarray and intarray. Then the mesh lambda calls the mesh method with x,y,z float array, int array");
     }//method
 
     static void decision(){
@@ -181,11 +178,15 @@ public class Funct {
         arrNodes.add(arrLine);
         arrNodes.add("light");
         arrNodes.add(arrLight);
+        arrNodes.add("floatarray");
+        arrNodes.add(arrFloat);
+        arrNodes.add("intarray");
+        arrNodes.add(arrInt);
     }
 
     static ArrayList<CubicCurve> arrCubicCurve = new ArrayList<>();
     static int cubicCurveCount = 0;
-    static List cubicCurveList = new ArrayList();
+    static List<java.io.Serializable> cubicCurveList = new ArrayList<java.io.Serializable>();
 
     static Function<String[], Boolean> cubicCurve = (String[] str) ->{
         if(!(str.length == 9)) {
@@ -228,7 +229,7 @@ public class Funct {
 
     static ArrayList<Circle> arrCircle = new ArrayList<>();
     static int circleCount = 0;
-    static List circleList = new ArrayList();
+    static List<java.io.Serializable> circleList = new ArrayList<>();
 
     static void circleM(int radius, int x, int y){
         arrCircle.add(new Circle());
@@ -265,7 +266,7 @@ public class Funct {
 
     static ArrayList<Line> arrLine = new ArrayList<>();
     static int lineCount = 0;
-    static List lineList = new ArrayList();
+    static List<java.io.Serializable> lineList = new ArrayList<>();
 
     static void lineM(int x1, int y1, int x2, int y2 ){
         arrLine.add(new Line(x1,y1,x2,y2));
@@ -330,7 +331,7 @@ public class Funct {
         ++rectCount;
     }//method
 
-    static List cylinderList = new ArrayList();
+    static List<java.io.Serializable> cylinderList = new ArrayList<>();
     static ArrayList<Cylinder> arrCyl = new ArrayList<>();
     static int cylinderCount = 0;
 
@@ -368,7 +369,7 @@ public class Funct {
 
     static ArrayList<Box> arrBox = new ArrayList<>();
     static int boxCount = 0;
-    static List boxList = new ArrayList();
+    static List<java.io.Serializable> boxList = new ArrayList<>();
 
     static void boxM(int depth, int width, int height, int x, int y){
         arrBox.add(new Box());
@@ -410,7 +411,7 @@ public class Funct {
 
     static ArrayList<Sphere> arrSphere = new ArrayList<>();
     static int sphereCount = 0;
-    static List sphereList = new ArrayList();
+    static List<java.io.Serializable> sphereList = new ArrayList<java.io.Serializable>();
 
     static void sphereM(int radius, int x, int y){
         arrSphere.add(new Sphere());
@@ -460,7 +461,7 @@ public class Funct {
 
     static ArrayList<Rectangle> arrRectangle = new ArrayList<>();
     static int rectangleCount = 0;
-    static List rectangleList = new ArrayList();
+    static List rectangleList = new ArrayList<>();
 
     static void rectM(int height, int width, int x, int y){
         arrRectangle.add(new Rectangle());
@@ -565,7 +566,7 @@ public class Funct {
 
     static ArrayList<TranslateTransition> arrTrans = new ArrayList<>();
     static int transCount = 0;
-    static List transitionList = new ArrayList();
+    static List<java.io.Serializable> transitionList = new ArrayList<java.io.Serializable>();
 
     static void transM(int sec, int x, int y, int z, Object node, boolean cycle){
         arrTrans.add(new TranslateTransition());
@@ -643,7 +644,7 @@ public class Funct {
 
     static ArrayList<TranslateTransition> arrTransStop = new ArrayList<>();
     static int transStopCount = 0;
-    static List transStopList = new ArrayList();
+    static List<java.io.Serializable> transStopList = new ArrayList<java.io.Serializable>();
 
     static void transStopM(int i){
         try{
@@ -664,7 +665,7 @@ public class Funct {
 
     static ArrayList<Text> arrTextDisplay = new ArrayList<>();
     static int textDisplayCount = 0;
-    static List textDisplayList = new ArrayList();
+    static List<java.io.Serializable> textDisplayList = new ArrayList<java.io.Serializable>();
 
     static void textM(String str, int x , int y, String type, int size){
         arrTextDisplay.add(new Text());
@@ -703,7 +704,7 @@ public class Funct {
 
     static ArrayList<Rotate> arrRotate = new ArrayList<>();
     static int rotateCount = 0;
-    static List rotateList = new ArrayList();
+    static List<java.io.Serializable> rotateList = new ArrayList<java.io.Serializable>();
 
     static void rotateM(int angle, int x, int y, int z, String axis, String name, int pos){
         arrRotate.add(new Rotate());
@@ -767,10 +768,10 @@ public class Funct {
 
     static ArrayList<FXMLLoader> arrFMXLLoader = new ArrayList<>();
     static int FXMLLoaderCount = 0;
-    static List FXMLLoaderList = new ArrayList();
+    static List<java.io.Serializable> FXMLLoaderList = new ArrayList<>();
     static ArrayList<Parent> arrParent = new ArrayList<>();
     static int parentCount = 0;
-    static List parentList = new ArrayList();
+    static List<String> parentList = new ArrayList<>();
 
     static void fxmlloaderM(String file) {
 
@@ -809,7 +810,7 @@ public class Funct {
 
     static ArrayList<Color> arrColor = new ArrayList<>();
     static int colorCount = 0;
-    static List colorList = new ArrayList();
+    static List<java.io.Serializable> colorList = new ArrayList<>();
     //arrRect.get(rectCount).setFill(Color.LIGHTBLUE);
 
     static void color2DM(int red, int green, int blue, String name, int pos){
@@ -864,7 +865,7 @@ public class Funct {
 
     static ArrayList<PhongMaterial> arrPhong = new ArrayList<>();
     static int phongCount = 0;
-    static List phongList = new ArrayList();
+    static List<java.io.Serializable> phongList = new ArrayList<java.io.Serializable>();
 
     static void color3DM(int diffRed, int diffGreen, int diffBlue, String name, int pos){
         Color d = Color.rgb(diffRed, diffGreen, diffBlue);
@@ -1017,7 +1018,7 @@ public class Funct {
 
     static ArrayList<PointLight> arrLight = new ArrayList<>();
     static int lightCount = 0;
-    static List lightList = new ArrayList();
+    static List<java.io.Serializable> lightList = new ArrayList<>();
 
     static void lightM(int x, int y, int z, int red, int green, int blue){
         try{
@@ -1105,6 +1106,276 @@ public class Funct {
             return true;
         }
     };//function
+
+    static void drawmodefillM(String name, int pos){
+        if(arrNodes.contains(name)) {
+            try {
+                int i = arrNodes.indexOf(name);
+                List nodes = (ArrayList) arrNodes.get(i + 1);
+                Shape3D node = (Shape3D) nodes.get(pos);
+                node.setDrawMode(DrawMode.FILL);
+            }catch(Exception e){
+                Main.textfieldB.setText("Error in Draw Mode Fill method call");
+            }
+        }
+        else
+            Main.textfieldB.setText("Not A Command");
+    }//method
+
+    static Function<String[], Boolean> drawmodefill = (String[] str) ->{
+        if(!(str.length == 3)) {
+            Main.textfieldB.setText("Not A Command");
+            return false;
+        }
+        else{
+            try {
+                String name = str[1].replace(" ","").toLowerCase();
+                int pos = Integer.parseInt(str[2]);
+                Main.textfieldB.setText("draw fill mode " +name+"_"+pos);
+                drawmodefillM(name,pos);
+            } catch (NumberFormatException e) {
+                Main.textfieldB.setText("Not A Command");
+                return false;
+            }
+            catch (Exception e) {
+                Main.textfieldB.setText("Something went wrong inside of drawmodefill lambda call");
+                return false;
+            }
+            return true;
+        }
+    };//function
+
+    static int[] editfaces(ArrayList<Integer> faces) {
+
+        int count = 0;
+
+        int[] newfaces = new int[faces.size() * 2];
+
+        for (int i = 0; i<newfaces.length; i++)
+            newfaces[i] = 0;
+
+        for (int i=0;i<newfaces.length;i++) {
+            if(i%2 == 0){
+                newfaces[i] = faces.get(count);
+                ++count;
+            }
+        }
+        return newfaces;
+    }//method
+
+    static float[] editvertexpts(ArrayList<Float> vertexpts) {
+
+        int count = 0;
+
+        float[] newvertexpts = new float[vertexpts.size()];
+
+        for (int i = 0; i<newvertexpts.length; i++)
+            newvertexpts[i] = vertexpts.get(i);
+
+        return newvertexpts;
+    }//method
+
+    static Function<String[], Boolean> mesh = (String[] str) ->{
+        if(!(str.length == 8)) {
+            Main.textfieldB.setText("Not A Command");
+            return false;
+        }
+        else{
+            try {
+                int x = Integer.parseInt(str[1]);
+                int y = Integer.parseInt(str[2]);
+                int z = Integer.parseInt(str[3]);
+
+                String namef = str[4].replace(" ","").toLowerCase();
+                int posf = Integer.parseInt(str[5]);
+                String namei = str[6].replace(" ","").toLowerCase();
+                int posi = Integer.parseInt(str[7]);
+
+                int i = arrNodes.indexOf(namef);
+                List nodesf = (ArrayList) arrNodes.get(i + 1);
+                ArrayList nodef = (ArrayList) nodesf.get(posf);
+
+                i = arrNodes.indexOf(namei);
+                List nodesi = (ArrayList) arrNodes.get(i + 1);
+                ArrayList nodei = (ArrayList) nodesi.get(posi);
+                meshM(x,y,z,nodef,nodei);
+            } catch (NumberFormatException e) {
+                Main.textfieldB.setText("Not A Command");
+                return false;
+            }
+            catch (Exception e) {
+                Main.textfieldB.setText("Something went wrong inside of mesh lambda call");
+                return false;
+            }
+            return true;
+        }
+    };//function
+
+    static ArrayList<TriangleMesh> arrTriMesh = new ArrayList<>();
+    static int trimeshCount = 0;
+    static List trimeshList = new ArrayList();
+
+    static ArrayList<MeshView> arrMeshView = new ArrayList<>();
+    static int meshviewCount = 0;
+    static List<String> meshviewList = new ArrayList<>();
+
+    static void meshM(int x, int y, int z, ArrayList vertexpts, ArrayList faces)
+    {
+        float[] texCoords =
+                {
+                        0.0f, 0.0f,
+                        0.0f, 1.0f,
+                        1.0f, 1.0f
+                };
+        int[] newfaces = editfaces(faces);
+        float[] newvertexpts = editvertexpts(vertexpts);
+
+        // Create a TriangleMesh
+        arrTriMesh.add(new TriangleMesh());
+        arrTriMesh.get(trimeshCount).getPoints().addAll(newvertexpts);
+        arrTriMesh.get(trimeshCount).getTexCoords().addAll(texCoords);
+        arrTriMesh.get(trimeshCount).getFaces().addAll(newfaces);
+        arrString.add("TriMesh_"+trimeshCount);
+        trimeshList.add("TriMesh_"+trimeshCount);
+        trimeshList.add(strCount);
+        trimeshList.add(objecty+25+strCount*20);
+        GenText("TriMesh" +" ("+x +","+y+","+z + ") ", objectx, objecty + 25 + strCount * 20);
+        ++strCount;
+        // Create a MeshView
+        arrMeshView.add(new MeshView());
+        arrMeshView.get(meshviewCount).setMesh(arrTriMesh.get(trimeshCount));
+        arrMeshView.get(meshviewCount).setTranslateX(x);
+        arrMeshView.get(meshviewCount).setTranslateY(y);
+        arrMeshView.get(meshviewCount).setTranslateZ(z);
+        meshviewList.add("MeshView_"+meshviewCount);
+        Main.group2.getChildren().add(arrMeshView.get(meshviewCount));
+        Main.textfieldB.setText(x+" "+y+" "+z+" "+faces.toString()+" "+vertexpts.toString());
+        ++trimeshCount;
+        ++meshviewCount;
+
+    }//method
+
+    //floatarray,{ 1,2,3,4}
+    static ArrayList<ArrayList<Float>> arrFloat = new ArrayList<>();
+    static int floatarrCount = 0;
+    static List floatarrList = new ArrayList<>();
+
+    static Function<String[], Boolean> floatarray = (String[] str) ->{
+        if(!(str[1].contains("{"))) {
+            Main.textfieldB.setText("Not A Command");
+            return false;
+        }
+        else{
+            try {
+                ArrayList<Integer> openb = new ArrayList<>();
+                ArrayList<Integer> closeb = new ArrayList<>();
+                for(int i = 2; i < str.length; i++){
+                    if(str[i].contains("{"))
+                        openb.add(i);
+                    else if(str[i].contains("}"))
+                        closeb.add(i);
+                }
+                if(!(openb.size()==0)){
+                    Main.textfieldB.setText("Not A Command");
+                    return false;
+                }
+                if(!(closeb.size()==1)){
+                    Main.textfieldB.setText("Not A Command");
+                    return false;
+                }
+                String temp = str[1].replace("{","");
+                float f1 = Float.parseFloat(temp);
+                ArrayList<Float> ftemp = new ArrayList<>();
+                ftemp.add(f1);
+                for(int i = 2; i < closeb.get(0); i++){
+                    f1 = Float.parseFloat(str[i]);
+                    ftemp.add(f1);
+                }
+                temp = str[closeb.get(0)].replace("}","");
+                f1 = Float.parseFloat(temp);
+                ftemp.add(f1);
+                arrFloat.add(ftemp);
+                Main.textfieldB.setText(arrFloat.get(floatarrCount).toString());
+                arrString.add("arrFloat_"+floatarrCount);
+                floatarrList.add("arrFloat_"+floatarrCount);
+                floatarrList.add(strCount);
+                floatarrList.add(objecty+25+strCount*20);
+                GenText("FloatArray_"+floatarrCount, objectx, objecty + 25 + strCount * 20);
+                ++floatarrCount;
+                ++strCount;
+
+            } catch (NumberFormatException e) {
+                Main.textfieldB.setText("Not A Command");
+                return false;
+            }
+            catch (Exception e) {
+                Main.textfieldB.setText("Something went wrong inside of floatarray lambda call");
+                return false;
+            }
+            return true;
+        }
+    };//function
+
+    //intarray,{ 1,2,3,4}
+    static ArrayList<ArrayList<Integer>> arrInt = new ArrayList<>();
+    static int intarrCount = 0;
+    static List intarrList = new ArrayList<>();
+
+    static Function<String[], Boolean> intarray = (String[] str) ->{
+        if(!(str[1].contains("{"))) {
+            Main.textfieldB.setText("Not A Command");
+            return false;
+        }
+        else{
+            try {
+                ArrayList<Integer> openb = new ArrayList<>();
+                ArrayList<Integer> closeb = new ArrayList<>();
+                for(int i = 2; i < str.length; i++){
+                    if(str[i].contains("{"))
+                        openb.add(i);
+                    else if(str[i].contains("}"))
+                        closeb.add(i);
+                }
+                if(!(openb.size()==0)){
+                    Main.textfieldB.setText("Not A Command");
+                    return false;
+                }
+                if(!(closeb.size()==1)){
+                    Main.textfieldB.setText("Not A Command");
+                    return false;
+                }
+                String temp = str[1].replace("{","");
+                int f1 = Integer.parseInt(temp);
+                ArrayList<Integer> ftemp = new ArrayList<>();
+                ftemp.add(f1);
+                for(int i = 2; i < closeb.get(0); i++){
+                    f1 = Integer.parseInt(str[i]);
+                    ftemp.add(f1);
+                }
+                temp = str[closeb.get(0)].replace("}","");
+                f1 = Integer.parseInt(temp);
+                ftemp.add(f1);
+                arrInt.add(ftemp);
+                Main.textfieldB.setText(arrInt.get(intarrCount).toString());
+                arrString.add("arrInt_"+intarrCount);
+                intarrList.add("arrInt_"+intarrCount);
+                intarrList.add(strCount);
+                intarrList.add(objecty+25+strCount*20);
+                GenText("IntArray_"+intarrCount, objectx, objecty + 25 + strCount * 20);
+                ++intarrCount;
+                ++strCount;
+            } catch (NumberFormatException e) {
+                Main.textfieldB.setText("Not A Command");
+                return false;
+            }
+            catch (Exception e) {
+                Main.textfieldB.setText("Something went wrong inside of intarray lambda call");
+                return false;
+            }
+            return true;
+        }
+    };//function
+
 
 
 

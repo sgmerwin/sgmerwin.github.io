@@ -15,9 +15,7 @@ import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
@@ -70,6 +68,11 @@ public class Funct {
         makeRun(floatarray,"floatarray","floatarray, {your numbers}","Stores the float array in an array");
         makeRun(intarray,"intarray","intarray, {your numbers}","stores the int array in an array");
         makeRun(mesh,"mesh","mesh, int x, int y, int z, float array list vertex pts, int array list faces","First the arrays have to be made with floatarray and intarray. Then the mesh lambda calls the mesh method with x,y,z float array, int array");
+        makeRun(linepow,"linepow","linepow,Double start, Double stop, Double inc, Double coeff, Double pow, Double con","Plots a power function on group 3");
+        makeRun(graphmove,"graphmove","graphmove, int x, int y, int z","Moves the group3 where the graphs live");
+        makeRun(graphaxes,"graphaxes","graphaxes, int xstart, int xend, int ystart, int yend","Puts a set of axes on group 3");
+        makeRun(graphscale,"graphscale","graphscale int x, int y, int z","Scales group 3");
+        makeRun(point,"point","point, double x, double y", "Plots a point on group 3 ");
     }//method
 
     static void decision(){
@@ -268,26 +271,41 @@ public class Funct {
     static int lineCount = 0;
     static List<java.io.Serializable> lineList = new ArrayList<>();
 
-    static void lineM(int x1, int y1, int x2, int y2 ){
+    static void lineM(Double x1, Double y1, Double x2, Double y2, boolean print ){
+        if(print == true) {
         arrLine.add(new Line(x1,y1,x2,y2));
         Main.group2.getChildren().add(arrLine.get(lineCount));
-        arrString.add("Line_"+lineCount);
-        GenText("Line_"+lineCount+" ("+x1+" ,"+y1+" ,"+x2+" ,"+y2+")",objectx,objecty+25+strCount*20);
-        lineList.add("Line_"+lineCount);
-        lineList.add(strCount);
-        lineList.add(objecty+25+strCount*20);
-        ++strCount;
-        ++lineCount;
+            arrString.add("Line_" + lineCount);
+            GenText("Line_" + lineCount + " (" + x1 + " ," + y1 + " ," + x2 + " ," + y2 + ")", objectx, objecty + 25 + strCount * 20);
+            lineList.add("Line_" + lineCount);
+            lineList.add(strCount);
+            lineList.add(objecty + 25 + strCount * 20);
+            ++strCount;
+            ++lineCount;
+        }
+        else{
+            Main.group3.getChildren().add(new Line(x1,y1,x2,y2));
+        }
     }//method
 
     static Function<String[], Boolean> line = (String[] str) ->{
-        if(!(str.length == 5)) {
+        if(!(str.length == 6)) {
             Main.textfieldB.setText("Not A Command");
             return false;
         }
         else{
             try {
-                lineM(Integer.parseInt(str[1]),Integer.parseInt(str[2]),Integer.parseInt(str[3]),Integer.parseInt(str[4]));
+                if(str[5].replace(" ","").toLowerCase().equals(true)) {
+                    lineM(Double.parseDouble(str[1]),Double.parseDouble(str[2]),Double.parseDouble(str[3]),Double.parseDouble(str[4]),true);
+                }
+                else if(str[5].replace(" ","").toLowerCase().equals(false)){
+                    lineM(Double.parseDouble(str[1]),Double.parseDouble(str[2]),Double.parseDouble(str[3]),Double.parseDouble(str[4]),false);
+                }
+                else{
+                    Main.textfieldB.setText("Not A Command");
+                    return false;
+                }
+
             } catch (NumberFormatException e) {
                 Main.textfieldB.setText("Not A Command");
                 return false;
@@ -1376,7 +1394,179 @@ public class Funct {
         }
     };//function
 
+    static void linepowM(Double start, Double stop, Double inc, Double coeff, Double pow, Double con){
+        for(double i = start; i<stop-inc; i+= inc){
+            double x1 = i;
+            double y1 = coeff*Math.pow(x1,pow)+con;
+            double x2 = i+.1;
+            double y2 = coeff*Math.pow(x2,pow)+con;
+            Funct.lineM(x1,y1,x2,y2,false);
+        }
+    }//method
 
+    //Double start, Double stop, Double inc, Double coeff, Double pow, Double con
+    static Function<String[], Boolean> linepow = (String[] str) ->{
+        if(!(str.length == 7)) {
+            Main.textfieldB.setText("Not A Command");
+            return false;
+        }
+        else{
+            try {
+                double start = Double.parseDouble(str[1]);
+                double stop = Double.parseDouble(str[2]);
+                double inc = Double.parseDouble(str[3]);
+                double coeff = Double.parseDouble(str[4]);
+                double pow = Double.parseDouble(str[5]);
+                double con = Double.parseDouble(str[6]);
+
+                linepowM(start,stop,inc,coeff,pow,con);
+
+            } catch (NumberFormatException e) {
+                Main.textfieldB.setText("Not A Command");
+                return false;
+            }
+            catch (Exception e) {
+                Main.textfieldB.setText("Something went wrong inside of linepow lambda call");
+                return false;
+            }
+            return true;
+        }
+    };//function
+
+    static void graphmoveM(int x, int y, int z){
+        Main.group3.setTranslateX(x);
+        Main.group3.setTranslateY(y);
+        Main.group3.setTranslateZ(z);
+    }//method
+
+    //int x, int y, int z
+    static Function<String[], Boolean> graphmove = (String[] str) ->{
+        if(!(str.length == 4)) {
+            Main.textfieldB.setText("Not A Command");
+            return false;
+        }
+        else{
+            try {
+                int x = Integer.parseInt(str[1]);
+                int y = Integer.parseInt(str[2]);
+                int z = Integer.parseInt(str[3]);
+
+                graphmoveM(x,y,z);
+
+            } catch (NumberFormatException e) {
+                Main.textfieldB.setText("Not A Command");
+                return false;
+            }
+            catch (Exception e) {
+                Main.textfieldB.setText("Something went wrong inside of graphmove lambda call");
+                return false;
+            }
+            return true;
+        }
+    };//function
+
+    static void graphaxesM(int xstart, int xend, int ystart, int yend){
+        Line xaxis = new Line(xstart,0,xend,0);
+        Line yaxis = new Line(0,ystart,0,yend);
+        Main.group3.getChildren().addAll(xaxis, yaxis);
+    }//method
+
+    static Function<String[], Boolean> graphaxes = (String[] str) ->{
+        if(!(str.length == 5)) {
+            Main.textfieldB.setText("Not A Command");
+            return false;
+        }
+        else{
+            try {
+                int xstart = Integer.parseInt(str[1]);
+                int xend = Integer.parseInt(str[2]);
+                int ystart = Integer.parseInt(str[3]);
+                int yend = Integer.parseInt(str[4]);
+                int width = Math.abs(xstart-xend);
+                int height = Math.abs(ystart-yend);
+                Rectangle rect = new Rectangle();
+                rect.setWidth(width);
+                rect.setHeight(height);
+                rect.setTranslateX(-width/2);
+                rect.setTranslateY(-height/2);
+                rect.setFill(Color.WHITE);
+                Main.group3.getChildren().add(rect);
+                graphaxesM(xstart,xend,ystart,yend);
+
+            } catch (NumberFormatException e) {
+                Main.textfieldB.setText("Not A Command");
+                return false;
+            }
+            catch (Exception e) {
+                Main.textfieldB.setText("Something went wrong inside of graphaxes lambda call");
+                return false;
+            }
+            return true;
+        }
+    };//function
+
+    static void graphscaleM(int x, int y, int z){
+        Main.group3.setScaleX(x);
+        Main.group3.setScaleY(y);
+        Main.group3.setScaleZ(z);
+
+    }//method
+
+    static Function<String[], Boolean> graphscale = (String[] str) ->{
+        if(!(str.length == 4)) {
+            Main.textfieldB.setText("Not A Command");
+            return false;
+        }
+        else{
+            try {
+                int x = Integer.parseInt(str[1]);
+                int y = Integer.parseInt(str[2]);
+                int z = Integer.parseInt(str[3]);
+                graphscaleM(x,y,z);
+
+            } catch (NumberFormatException e) {
+                Main.textfieldB.setText("Not A Command");
+                return false;
+            }
+            catch (Exception e) {
+                Main.textfieldB.setText("Something went wrong inside of graphaxes lambda call");
+                return false;
+            }
+            return true;
+        }
+    };//function
+
+    static Function<String[], Boolean> point = (String[] str) ->{
+        if(!(str.length == 3)) {
+            Main.textfieldB.setText("Not A Command");
+            return false;
+        }
+        else{
+            try {
+                double x = Double.parseDouble(str[1]);
+                double y = Double.parseDouble(str[2]);
+                pointM(x,y);
+
+            } catch (NumberFormatException e) {
+                Main.textfieldB.setText("Not A Command");
+                return false;
+            }
+            catch (Exception e) {
+                Main.textfieldB.setText("Something went wrong inside of point lambda call");
+                return false;
+            }
+            return true;
+        }
+    };//function
+
+    static void pointM(double x, double y){
+        Circle circle = new Circle();
+        circle.setRadius(2);
+        circle.setCenterX(x);
+        circle.setCenterY(y);
+        circle.setFill(Color.RED);
+        Main.group3.getChildren().add(circle);
+    }//method
 
 
 

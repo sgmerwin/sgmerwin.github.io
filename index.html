@@ -292,6 +292,79 @@ Here is a screenshot of FXyz working with a 3D mesh plot and a spring from the e
     editing these files. I do want to be able to import a wide range of file types and export to STL and OBJ.
     I am going to try working with the rest of the jars from InteractiveMesh.org and see how they work.
 </p>
+<p>
+    11/10/19
+</p>
+<p>
+    <h4>JavaFX Obj File Importer and JPG & PNG File Importer</h4>
+</p>
+<p>
+    I got the Obj file importer from InteractiveMesh.org working this morning and was able to load JPG's
+    and PNG's onto the JavaFX scene using the JavaFX native Image class.
+    I played around with URL's for a while making input streams from files with http extensions.
+    For these imports I am just using local files so I used the Java File class. I totally could have used the URL
+    class just the same.
+    Here is a screenshot of an Obj file loaded onto the JavaFX group.
+</p>
+<p>
+    <img src="obj_screenshot_11_10_19.png" alt="obj viewer screenshot" align="middle"
+         style="width:300px;height300px;" >
+</p>
+<p>
+    <h4>Blender is Awesome</h4>
+</p>
+<p>
+    The STL files just load straight up. The Obj file needs to be in a folder with the associated
+    .mtl file. My solution was to upload the file into Blender and then let Blender export it. When Blender
+    exports and obj file it generates a folder with several small files; one being an mtl.
+    If you try to load the obj file straight up, the InteractiveMesh loader kicks out an error that
+    it did not find the mtl file. Other than that, the InteractiveMesh obj file loader is working
+    as expected.
+    I tried the obj file loader from the FXyz jar w/o success. It keeps throwing a file not found error.
+    I can stream the file into the terminal with a loop of string prints. The other loaders find the files
+    but the FXyz loader throws an error.
+    So I have code working for importing STL's and OBJ's with the InteractiveMesh jar's.
+    InteractiveMesh had other loaders for file types I have not used so I was not too worried about those.
+    Here is a screenshot of the loader code and the obj file folder with the mtl files from blender.
+</p>
+<p>
+    <img src="obj_import_11_10_19.png" alt="obj loader code" align="middle"
+         style="width:300px;height300px;" >
+</p>
+<p>
+    <img src="obj_file_folder_11_10_19.png" alt="obj mtl file folder" align="middle"
+         style="width:300px;height300px;" >
+</p>
+<p>
+    <h4>JPEG's & PNG's into JavaFX</h4>
+</p>
+<p>
+    The JavaFX native Image class is loading jpeg's and png's onto the JavaFX group no problem.
+    Here is a screenshot of a circuit board image as a jpg loaded onto a JavaFX group and the code
+    to load the jpg.
+</p>
+<p>
+    <img src="circuit_screenshot_11_10_19.png" alt="obj circuit screenshot" align="middle"
+         style="width:300px;height300px;" >
+</p>
+<p>
+    <img src="jpg_import_11_10_19.png" alt="obj jpg import code" align="middle"
+         style="width:300px;height300px;" >
+</p>
+<p>
+    Now I have a bunch of java code to build to get these importers working as method calls in my
+    JavaFX app. Since I am using local files I am going to build a method to import the file strings into
+    an array. Then the user just uses "file, 1" in their import method call and there is no more
+    messing with the address string. Later on I could build a URL method and use it for local files and
+    web resources. This could be done much nicer where you feed an image folder address to a method that loads
+    all of the file address strings into a File array and then the users calls them out into the method calls.
+    For now I am just going to feed file address strings into an array with method calls from the app.
+    I am going to have to write the code to have Java save all of the arrays so the app has a save option.
+    Probably a good thing to figure out now before I continue with the current design structure any further.
+    So save all of the arrays to a file and then call everything back to the scene when the file is opened.
+
+</p>
+
 </body>
 
 </html>
